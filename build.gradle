@@ -1,0 +1,87 @@
+plugins {
+	id 'com.jfrog.artifactory' version '4.28.3'
+    id 'com.apgsga.common.repo'
+
+}
+
+description = 'Parent Project for all Patch Service modules'
+
+project.ext {
+	mavenLocalRepo = repositories.mavenLocal().url
+}
+
+configure (allprojects)  {
+    apply plugin: 'com.apgsga.common.repo'
+    repositories {
+        maven {
+            name "repo"
+        }
+
+    }
+
+}
+configure (allprojects
+       - project(':service-bom')) {
+    apply plugin: 'maven-publish'
+    group = publishGroup  /* From gradle.properties */
+    version = publishVersion /* From gradle.properties */
+     publishing {
+        def repoName = version.endsWith("SNAPSHOT") ? "snapshots" : "releases"
+        repositories {
+            maven {
+                name = repoName
+            }
+        }
+    }
+
+}
+configure (project(':service-bom')) {
+    apply plugin: 'maven-publish'
+    group = publishGroup  /* From gradle.properties */
+    version = publishVersion + "-SNAPSHOT" /* From gradle.properties */
+     
+    publishing {
+        repositories {
+            maven {
+                name = "snapshots"
+            }
+        }
+    }
+}
+configure (subprojects
+        - project(':service-bom')) {
+    apply plugin: 'java-library'
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    test {
+        useJUnitPlatform()
+    }
+
+    tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+    task sourcesJar(type: Jar) {
+        classifier 'sources'
+        from sourceSets.main.allJava
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+            }
+        }
+
+    }
+
+}

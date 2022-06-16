@@ -1,0 +1,14 @@
+[Unit]
+Description=Apg Patch Service Server
+
+[Service]
+ExecStart=/usr/bin/java -jar -Xms256m -Xmx2048m /opt/service-servcer/bin/service-servcer.jar --spring.config.location=file:/etc/opt/service-servcer/application.properties,file:/etc/opt/service-servcer/ops.properties  --logging.config=/etc/opt/service-servcer/logback.xml
+User=service-servcer
+WorkingDirectory=/var/opt/service-servcer
+Restart=on-failure
+RestartSec=90
+StartLimitInterval=400
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

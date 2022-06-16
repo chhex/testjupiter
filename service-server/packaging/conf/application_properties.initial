@@ -1,0 +1,46 @@
+# Spring Boot Configuration
+spring.application.name = Microservice Patch Service App
+server.address=<%= $piper_bind_address %>
+server.port=<%= $piper_server_port %>
+endpoints.shutdown.enabled=true
+management.security.enabled=false
+# logging.file=log/service-servcer.log
+spring.profiles.active=<%= $piper_spring_profiles %>
+
+# Appication Configuration 
+# File Location 
+maven.localrepo.location=mavenrepo
+json.db.location=db
+json.db.work.location=dbwork
+json.meta.info.db.location=metaInfoDb
+json.meta.info.db.work.location=metaInfoWork
+
+# Cvs Zugriff
+vcs.host=<%= $piper_cvs_remote_host %>
+vcs.user=<%= $piper_cvs_user %>
+
+# Jenkins
+jenkins.host=<%= $piper_jenkins_host %>
+jenkins.ssh.user=<%= $jenkins_ssh_user %>
+jenkins.ssh.port=<%= $jenkins_cli_port %>
+jenkins.pipeline.repo=<%= $jenkins_builder_pipeline_repo %>
+jenkins.pipeline.repo.branch=<%= $jenkins_builder_pipeline_repo_branch %>
+jenkins.pipeline.repo.install.script=<%= $jenkins_install_pipeline_script_path %>
+jenkins.pipeline.repo.assemble.script=<%= $jenkins_assemble_pipeline_script_path %>
+
+
+# Maven Repo
+mavenrepo.user.name=<%= $artifactory_user %>
+mavenrepo.baseurl=<%= $artifactory_uri %>
+mavenrepo.name=<%= $artifactory_repo %>
+mavenrepo.user.encryptedPwd=<%= $artifactory_passwd %>
+
+# Docker script
+docker.install.script.path=/opt/service-servcer/bin/ibusDockerInstall.sh
+docker.tag.script.path=/opt/service-servcer/bin/ibusDockerTagNPush.sh
+
+# Path to property file where specific CVS Branches are define for list of CVS modules
+cvs.config.specific.branch.file.path=/etc/opt/service-servcer/cvsConfigSpecificBranchForModules.properties
+
+# Max number of db modules which will be tagged in one shot. Restart required for new setting to be applied
+tag.db.module.chunk.size=30

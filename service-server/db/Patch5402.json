@@ -1,0 +1,1 @@
+{"patchNumber":"5402","developerBranch":"","tagNr":2,"dbPatch":{"dbPatchBranch":null,"prodBranch":null,"patchTag":null,"dbObjects":[{"fileName":"FileName1","filePath":"FilePath1","moduleName":null,"hasConflict":false}]},"dockerServices":[],"services":[{"serviceName":"It21Ui","artifactsToPatch":[],"patchTag":null,"serviceMetaData":null,"migrateBom":false}]}

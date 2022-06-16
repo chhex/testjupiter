@@ -1,0 +1,4 @@
+rootProject.name = 'apg-patch-service'
+include 'service-client'
+include 'service-servcer'
+include 'service-bom'

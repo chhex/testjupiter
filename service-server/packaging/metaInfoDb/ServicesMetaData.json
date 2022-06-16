@@ -1,0 +1,118 @@
+{
+  "servicesMetaData": [
+    {
+      "serviceName": "echoservice",
+      "revisionPkgName": "apg-gradle-plugins-testsmodules/testapp/testapp-pkg",
+      "bomCoordinates": {
+        "artifactId": "dm-bom",
+        "groupId": "com.apgsga.testapp",
+        "name": "apg-gradle-plugins-testsmodules/testapp/testapp-bom",
+        "version": "1.0.0.DEV-ADMIN-UIMIG-SNAPSHOT",
+        "dependencyLevel": 0
+      },
+      "microServiceBranch": "HEAD",
+      "baseVersionNumber": "1.0.0",
+      "revisionMnemoPart": "DEV-ADMIN-UIMIG",
+      "packages": [
+        {
+          "packagerName": "apg-gradle-plugins-testsmodules/testapp/testapp-pkg",
+          "pkgServiceName": "echoservice",
+          "starterCoordinates": [
+            "com.apgsga.testapp:testapp-service"
+          ]
+        }
+      ]
+    },
+    {
+      "serviceName": "calctestservice",
+      "revisionPkgName": "apg-gradle-plugins-testsmodules-2/testapp-2/testapp-pkg-2",
+      "bomCoordinates": {
+        "artifactId": "testapp-dm-bom-2",
+        "groupId": "com.apgsga.testapp2",
+        "name": "apg-gradle-plugins-testsmodules-2/testapp-2/testapp-bom-2",
+        "version": "1.0.1.DEV-ADMIN-UIMIG-SNAPSHOT",
+        "dependencyLevel": 0
+      },
+      "microServiceBranch": "HEAD",
+      "baseVersionNumber": "1.0.1",
+      "revisionMnemoPart": "DEV-ADMIN-UIMIG",
+      "packages": [
+        {
+          "packagerName": "apg-gradle-plugins-testsmodules-2/testapp-2/testapp-pkg-2",
+          "pkgServiceName": "calctestservice",
+          "starterCoordinates": [
+            "com.apgsga.testapp2:testapp-service-2"
+          ]
+        }
+      ]
+    },
+    {
+      "serviceName": "it21",
+      "revisionPkgName": "it21-ui-pkgs/revision",
+      "bomCoordinates": {
+        "artifactId": "dm-bom",
+        "groupId": "com.affichage.common.maven",
+        "name": "_dm_bom",
+        "version": "9.1.0.ADMIN-UIMIG-SNAPSHOT",
+        "dependencyLevel": 0
+      },
+      "microServiceBranch": "it21_release_9_1_1_admin_uimig",
+      "baseVersionNumber": "9.1.0",
+      "revisionMnemoPart": "ADMIN-UIMIG",
+      "packages": [
+        {
+          "packagerName": "it21-ui-pkgs/ui",
+          "pkgServiceName": "it21-ui",
+          "starterCoordinates": [
+            "com.affichage.it21.ui:it21-ui-runtime",
+            "com.apgsga.it21.ui.mdt:it21ui-app-starter",
+            "com.apgsga.it21.ui.mdt:javaforms-starter",
+            "com.apgsga.it21:lasttests-jfmt",
+            "org.springframework.boot:spring-boot-starter-tomcat",
+            "moyosoft:moyocore_x64:3.0.4:@dll"
+          ]
+        },
+        {
+          "packagerName": "it21-ui-pkgs/server",
+          "pkgServiceName": "jadas",
+          "starterCoordinates": [
+            "com.apgsga.it21.ui.mdt:jadas-app-starter",
+            "com.apgsga.it21.ui.mdt:jadas-framework-starter"
+          ]
+        }
+      ]
+    },
+    {
+      "serviceName": "it21-test-ui",
+      "revisionPkgName": "apg-gradle-plugins-testsmodules-3/testapp-3/testapp-revision-pkg-3",
+      "bomCoordinates": {
+        "artifactId": "testapp-bom-3",
+        "groupId": "com.apgsga.testapp",
+        "name": "apg-gradle-plugins-testsmodules-3/testapp-3/testapp-bom-3",
+        "version": "1.0.3.DEV-ADMIN-UIMIG-SNAPSHOT",
+        "dependencyLevel": 0
+      },
+      "microServiceBranch": "HEAD",
+      "baseVersionNumber": "1.0.3",
+      "revisionMnemoPart": "DEV-ADMIN-UIMIG",
+      "packages": [
+        {
+          "packagerName": "apg-gradle-plugins-testsmodules-3/testapp-3/testapp-ui-pkg-3",
+          "pkgServiceName": "test-ui",
+          "starterCoordinates": [
+            "com.apgsga.testapp:testapp-ui-runtime-3",
+            "moyosoft:moyocore_x64:3.0.4:@dll"
+          ]
+        },
+        {
+          "packagerName": "apg-gradle-plugins-testsmodules-3/testapp-3/testapp-jadas-pkg-3",
+          "pkgServiceName": "test-jadas",
+          "starterCoordinates": [
+            "com.apgsga.testapp:testapp-jadas-appstarter-3",
+            "com.apgsga.testapp:testapp-jadas-frameworkstarter-3"
+          ]
+        }
+      ]
+    }
+  ]
+}

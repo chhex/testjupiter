@@ -1,0 +1,17 @@
+description = 'Microservice Patch Rest Client'
+jar {
+	baseName = 'service-client'
+}
+dependencies {
+	implementation platform(project(':service-bom'))
+	implementation group: 'org.springframework', name: 'spring-web'
+	implementation group: 'commons-lang', name: 'commons-lang'
+	implementation group: 'com.google.guava', name: 'guava'
+	testImplementation project(':service-servcer')
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+
+}
+configurations.all { 
+    exclude group: 'junit'
+	exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+}

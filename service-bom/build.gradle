@@ -1,0 +1,48 @@
+apply plugin: 'java-platform'
+
+javaPlatform {
+    allowDependencies()
+}
+
+dependencies {
+    api platform("org.springframework.boot:spring-boot-dependencies:${project.'springBootVersion'}")
+    constraints {
+		api project(':service-client')
+		api project(':service-servcer')
+        api 'com.google.guava:guava:18.0'
+        api group: 'commons-io', name: 'commons-io', version: '2.11.0'
+        api group: 'commons-lang', name: 'commons-lang', version: '2.6'
+        api 'commons-transaction:commons-transaction:1.2'
+        api group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
+        api 'org.jfrog.artifactory.client:artifactory-java-client-services:2.6.0'
+        api 'org.codehaus.groovy:groovy-all:3.0.2'
+        api 'org.codehaus.groovy:groovy-backports-compat23:3.0.2'
+        api 'org.spockframework:spock-spring:2.0-groovy-3.0'
+		api group: 'org.spockframework', name: 'spock-core', version: '2.0-groovy-3.0'
+        api 'com.jcraft:jsch:0.1.54'
+		api group: 'oracle', name: 'ojdbc', version: '19.14.0.0'
+		api 'javax.transaction:jta:1.1'
+        api group: 'org.codehaus.plexus', name: 'plexus-com.apgsga.microservice.patch.core.impl.persistence.utils', version: '3.0.10'
+        api group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+        api group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.11'
+        api group: 'ch.qos.logback', name: 'logback-core', version: '1.1.11'
+        api group: 'org.eclipse.aether', name: 'aether-api', version: '1.1.0'
+        api group: 'org.eclipse.aether', name: 'aether-spi', version: '1.1.0'
+        api group: 'org.eclipse.aether', name: 'aether-util', version: '1.1.0'
+        api group: 'org.eclipse.aether', name: 'aether-impl', version: '1.1.0'
+        api group: 'org.eclipse.aether', name: 'aether-connector-basic', version: '1.1.0'
+        api group: 'org.eclipse.aether', name: 'aether-transport-file', version: '1.1.0'
+        api group: 'org.eclipse.aether', name: 'aether-transport-http', version: '1.1.0'
+        api group: 'org.apache.maven', name: 'maven-aether-provider', version: '3.1.0'
+        api 'org.eclipse.sisu:org.eclipse.sisu.plexus:0.1.1'
+        api group: 'org.jasypt', name: 'jasypt', version: '1.9.0'
+    }
+}
+
+publishing {
+    publications {
+        platformBom(MavenPublication) {
+            from components.javaPlatform
+        }
+    }
+}

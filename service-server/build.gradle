@@ -1,0 +1,175 @@
+plugins {
+  	id 'groovy'
+	id 'nebula.ospackage' version '9.1.1'
+  	id 'ivy-publish'  
+	id 'org.springframework.boot' version '2.4.4'
+}
+apply plugin: 'nebula.ospackage'
+apply plugin: 'groovy'
+apply plugin: 'ivy-publish'
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'org.springframework.boot'
+
+description = 'Server , which provides  Patch Functionality through a Restful Controller  '
+
+jar {
+	baseName = 'service-servcer'
+}
+
+springBoot {
+	mainClass = 'com.apgsga.microservice.patch.server.MicroPatchServer'
+}
+
+dependencies {
+    implementation platform(project(':service-bom'))
+	implementation group: 'commons-lang', name: 'commons-lang'
+	api group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+	api group: 'org.springframework.boot', name: 'spring-boot-starter'	
+	api group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'	
+	api group: 'org.springframework.boot', name: 'spring-boot-starter-web'	
+	api group: 'org.springframework.data', name: 'spring-data-commons'
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'	
+}
+
+sourceSets {
+  test {
+    resources {
+      srcDir 'src/test/java'
+      include '**/*.properties'
+    }
+  }
+}
+
+
+def pkgVersion = version
+def releaseNbr = project.rootProject.hasProperty('buildNumber') ? project.rootProject.property('buildNumber') : "1"
+def homeDir = "/opt/${project.name}"
+
+
+// Netflix Nebula Os Package Configuration, see : https://github.com/nebula-plugins/gradle-ospackage-plugin/wiki
+ospackage {
+	packageName = "${project.name}"
+	version = "${pkgVersion}"
+	release =  releaseNbr
+	os = LINUX
+	type = BINARY
+	arch = NOARCH
+	provides('aps')
+
+	preInstall file("packaging/rpm/pre-install.sh")
+	postInstall file("packaging/rpm/post-install.sh")
+    preUninstall file("packaging/rpm/pre-uninstall.sh")
+    postUninstall file("packaging/rpm/post-uninstall.sh")
+
+	into "${homeDir}"
+	user ""
+	permissionGroup "service-servcer"
+	
+	from(jar.outputs.files) {
+		// Strip the version from the jar filename
+		rename { String fileName ->
+			fileName.replace("-${project.version}", "")
+		}
+		fileMode 0644
+		into "bin"
+	}
+	
+	from('packaging/service') {
+		into '/etc/systemd/system'
+		include '*.service'
+		addParentDirs false
+	// TODO (che, 1.2.2018) Bug somewhere along the nebula / gradle chain
+	// See also https://github.com/nebula-plugins/nebula-publishing-plugin/pull/71
+	//	expand project.properties
+		user 'root'
+		permissionGroup 'root'
+		fileMode = 0644
+	}
+
+	// Copy the config files
+	from("packaging/conf") {
+		into "/etc/opt/${project.name}"
+		fileType CONFIG | NOREPLACE
+		user 'root'
+		permissionGroup 'root'
+		// TODO (che,11.4)
+		fileMode 0775
+	}
+	
+	from("packaging/metaInfoDb") {
+	   	into "/var/opt/${project.name}/metaInfoDb"
+		user "root"
+		permissionGroup "root"
+		// TODO (che 22.5) :  we need a common group for this directory
+		fileMode 0755
+		fileType CONFIG | NOREPLACE
+	}
+	
+
+	
+	directory("/var/opt/${project.name}", 0755 )
+	//Log dir
+	directory("/var/opt/${project.name}/log", 0755 )
+	
+	// Local Maven Repo
+	directory("/var/opt/${project.name}/mavenrepo", 0755 )
+
+	from('packaging/bin') {
+		include '*.*'
+		fileMode 0755
+		into 'bin'
+	}
+	
+}
+
+ buildRpm {
+	directory("/var/opt/${project.name}", 0755 )
+	//Log dir
+	directory("/var/opt/${project.name}/log", 0755 )
+	
+	//DB dir
+	directory("/var/opt/${project.name}/dbwork", 0755 )
+	 directory("/var/opt/${project.name}/db", 0755 )
+	
+	// Local Maven Repo
+	directory("/var/opt/${project.name}/mavenrepo", 0755 )
+}
+
+
+
+
+
+
+publishing {
+	publications {
+		yumRpm(IvyPublication) {
+			artifact buildRpm.outputs.getFiles().getSingleFile()
+		}
+	}
+}
+
+publishToMavenLocal {}.dependsOn(buildRpm)
+artifactoryPublish {}.dependsOn(buildRpm)
+
+artifactory {
+	contextUrl = "${mavenRepoBaseUrl}/"
+    publish {
+		def publishYumRepoName = project.hasProperty("apgMultiserviceYumRepo") ? project.property("apgMultiserviceYumRepo") : "multiservice_yumdev"
+        repository {
+            repoKey = "${publishYumRepoName}"
+            username = mavenRepoUser
+            password = mavenRepoPwd
+            ivy {
+                 artifactLayout = "${buildRpm.outputs.getFiles().getSingleFile().getName()}"
+            }
+        }
+        defaults {
+            publications ('yumRpm')
+            publishBuildInfo = false  
+            publishArtifacts = true   
+            publishPom = false   
+            publishIvy = false  
+        }
+    }
+}
+
